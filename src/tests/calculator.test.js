@@ -11,7 +11,7 @@
  * large numbers, and division by zero.
  */
 
-const { add, subtract, multiply, divide } = require('../calculator');
+const { add, subtract, multiply, divide, modulo, power, sqrt } = require('../calculator');
 
 // ── Addition ──────────────────────────────────────────────────────────────────
 describe('add', () => {
@@ -71,5 +71,51 @@ describe('divide', () => {
 
   test('throws when dividing negative number by zero', () => {
     expect(() => divide(-5, 0)).toThrow('Division by zero is not allowed.');
+  });
+});
+
+// ── Modulo ────────────────────────────────────────────────────────────────────
+describe('modulo', () => {
+  test('10 % 3 = 1', () => expect(modulo(10, 3)).toBe(1));
+  test('even division returns zero remainder', () => expect(modulo(10, 5)).toBe(0));
+  test('modulo with larger divisor returns dividend', () => expect(modulo(3, 10)).toBe(3));
+  test('modulo with negative dividend', () => expect(modulo(-10, 3)).toBe(-1));
+  test('modulo with decimal numbers', () => expect(modulo(10.5, 3)).toBeCloseTo(1.5));
+  test('zero modulo any number is zero', () => expect(modulo(0, 7)).toBe(0));
+
+  // Edge case: modulo by zero must throw
+  test('throws an error when modulo by zero', () => {
+    expect(() => modulo(10, 0)).toThrow('Modulo by zero is not allowed.');
+  });
+});
+
+// ── Power (Exponentiation) ────────────────────────────────────────────────────
+describe('power', () => {
+  test('2 ** 8 = 256', () => expect(power(2, 8)).toBe(256));
+  test('squaring a number', () => expect(power(5, 2)).toBe(25));
+  test('any number to the power of 0 is 1', () => expect(power(99, 0)).toBe(1));
+  test('any number to the power of 1 is itself', () => expect(power(7, 1)).toBe(7));
+  test('negative base with even exponent gives positive', () => expect(power(-3, 2)).toBe(9));
+  test('negative base with odd exponent gives negative', () => expect(power(-3, 3)).toBe(-27));
+  test('fractional exponent (cube root of 27)', () => expect(power(27, 1 / 3)).toBeCloseTo(3));
+  test('zero to any positive power is zero', () => expect(power(0, 5)).toBe(0));
+});
+
+// ── Square Root ───────────────────────────────────────────────────────────────
+describe('sqrt', () => {
+  test('sqrt(144) = 12', () => expect(sqrt(144)).toBe(12));
+  test('sqrt(4) = 2', () => expect(sqrt(4)).toBe(2));
+  test('sqrt(0) = 0', () => expect(sqrt(0)).toBe(0));
+  test('sqrt(1) = 1', () => expect(sqrt(1)).toBe(1));
+  test('sqrt of a non-perfect square returns decimal', () => expect(sqrt(2)).toBeCloseTo(1.4142));
+  test('sqrt(9) = 3', () => expect(sqrt(9)).toBe(3));
+
+  // Edge case: square root of a negative number must throw
+  test('throws an error for square root of a negative number', () => {
+    expect(() => sqrt(-1)).toThrow('Square root of a negative number is not allowed.');
+  });
+
+  test('throws for large negative number', () => {
+    expect(() => sqrt(-100)).toThrow('Square root of a negative number is not allowed.');
   });
 });
